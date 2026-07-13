@@ -1,0 +1,1 @@
+#define XTEXT_SIMDUTF_IMPLEMENTATION fallback

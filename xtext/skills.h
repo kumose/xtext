@@ -43,6 +43,8 @@
 /// AI: - Thin user config layer (cmake/) for easy upgrades
 /// AI: - Versioned framework (kmcmake/) that can be replaced on upgrade
 /// AI: - Generated version.h provides build info + SIMD enable macros at compile time
+/// AI: - Zero external dependencies: fast_float (float parsing) and simdutf
+/// AI:   (Unicode validation/transcoding) are internalized under xtext/.
 
 /// @brief Directory layout
 /// AI: .
@@ -121,6 +123,41 @@
 /// @brief XTEXT_BUILD_SYSTEM        — OS distro name
 /// @brief XTEXT_GIT_COMMIT_HASH     — full git commit
 /// @brief XTEXT_GIT_VERSION_STRING  — "tag-hash[-dirty]"
+/// @}
+
+/// @defgroup internalized_libs Internalized Libraries
+/// @brief The following libraries are vendored and internalized into xtext.
+///        They are compiled as part of xtext, not as separate targets.
+/// @{
+/// @brief fast_float
+/// AI: Headers at xtext/fast_float/include/fast_float/.
+/// AI: C++ namespace: xtext (migrated from fast_float).
+/// AI: Provides xtext::from_chars() for float/double/integer parsing.
+///
+/// @brief simdutf (Unicode validation/transcoding)
+/// AI: Internalized under xtext/ — compiled as part of xtext_builtin.
+/// AI: Public header: <xtext/simdutf.h>
+/// AI: C API header:  <xtext/simdutf_c.h>
+/// AI: Sources under xtext/simdutf/ (flat, subdirs for arch impls).
+/// AI: All macros prefixed XTEXT_SIMDUTF_ to avoid conflict with upstream.
+/// AI:
+/// AI: C++ namespace: xtext (migrated from simdutf).
+/// AI: Key functions on xtext::implementation (obtained via xtext::get_active_implementation()):
+/// AI:   validate_utf8/utf16le/utf16be/utf32(input, length) -> bool
+/// AI:   count_utf8/utf16le/utf16be(input, length) -> size_t
+/// AI:   convert_utf8_to_utf16le/utf16be/utf32(output, length, output) -> result
+/// AI:   convert_utf16le/utf16be_to_utf8/utf32(...) -> result
+/// AI:   convert_latin1_to_utf8/utf16le/utf16be/utf32(...) -> result
+/// AI:   convert_utf8/utf16/utf32_to_latin1(...) -> result
+/// AI:   detect_encodings(input, length) -> int (bitmask)
+/// AI:   base64_to_binary/binary_to_base64(...) -> result
+/// AI:
+/// AI: C API (xtext_ prefix, declared in <xtext/simdutf_c.h>):
+/// AI:   xtext_validate_utf8/utf16/utf32(...) -> bool
+/// AI:   xtext_convert_utf8_to_utf16/utf32(...) -> size_t
+/// AI:   xtext_latin1_to_utf8/utf16/utf32(...) -> size_t
+/// AI:   xtext_autodetect_encoding(...) -> xtext_encoding_type
+/// AI:   xtext_detect_encodings(...) -> int
 /// @}
 
 // AI: End of skills.h — AI assistants should prioritize this file and docs/AI.md
