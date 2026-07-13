@@ -34,6 +34,10 @@ set(KMCMAKE_CXX_OPTIONS
 list(REMOVE_DUPLICATES KMCMAKE_CXX_OPTIONS)
 kmcmake_print_list_label("CXX_OPTIONS:" KMCMAKE_CXX_OPTIONS)
 
+if(MSVC)
+    list(APPEND KMCMAKE_CXX_OPTIONS "/utf-8")
+endif()
+
 ###############################
 # User custom flags (optional)
 # =============================
