@@ -1,0 +1,7 @@
+#define XTEXT_SIMDUTF_IMPLEMENTATION rvv
+
+#if XTEXT_SIMDUTF_CAN_ALWAYS_RUN_RVV
+// nothing needed.
+#else
+XTEXT_SIMDUTF_TARGET_RVV
+#endif

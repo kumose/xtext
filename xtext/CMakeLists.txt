@@ -15,41 +15,30 @@
 ###########################################################################
 # below are examples, after initialization, modify it to your own.
 ###########################################################################
-###kmcmake_example
+# simdutf and fast_float are internalized — zero external dependencies.
+# See xtext/skills.h for details.
+
 kmcmake_cc_library(
         NAMESPACE ${PROJECT_NAME}
-        NAME foo
+        NAME xtext
         SOURCES
-        foo.cc
+        simdutf/simdutf.cc
+        ascii.cc
+        trim.cc
+        match.cc
+        str_replace.cc
+        str_cat.cc
+        str_split.cc
+        escaping.cc
+        substitute.cc
+        details/memutil.cc
+        details/utf8.cc
+        fmt/format.cc
+        fmt/os.cc
         CXXOPTS
         ${KMCMAKE_CXX_OPTIONS}
         PLINKS
         ${KMCMAKE_DEPS_LINK}
-        PUBLIC
-)
-
-kmcmake_cc_interface(
-        NAMESPACE ${PROJECT_NAME}
-        NAME api
-        HEADERS
-        api.h
-        CXXOPTS
-        ${KMCMAKE_CXX_OPTIONS}
-        PUBLIC
-)
-
-kmcmake_cc_binary(
-        NAMESPACE ${PROJECT_NAME}
-        NAME shared_main
-        SOURCES
-        main.cc
-        CXXOPTS
-        ${KMCMAKE_CXX_OPTIONS}
-        DEPS
-        ${PROJECT_NAME}::foo
-        LINKS
-        ${KMCMAKE_DEPS_LINK}
-        ${PROJECT_NAME}::foo
         PUBLIC
 )
 

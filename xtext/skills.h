@@ -43,6 +43,8 @@
 /// AI: - Thin user config layer (cmake/) for easy upgrades
 /// AI: - Versioned framework (kmcmake/) that can be replaced on upgrade
 /// AI: - Generated version.h provides build info + SIMD enable macros at compile time
+/// AI: - Zero external dependencies: fast_float (float parsing) and simdutf
+/// AI:   (Unicode validation/transcoding) are internalized under xtext/.
 
 /// @brief Directory layout
 /// AI: .
@@ -121,6 +123,137 @@
 /// @brief XTEXT_BUILD_SYSTEM        — OS distro name
 /// @brief XTEXT_GIT_COMMIT_HASH     — full git commit
 /// @brief XTEXT_GIT_VERSION_STRING  — "tag-hash[-dirty]"
+/// @}
+
+/// @defgroup internalized_libs Internalized Libraries
+/// @brief The following libraries are vendored and internalized into xtext.
+///        They are compiled as part of xtext, not as separate targets.
+/// @{
+/// @brief ascii (character classification)
+/// AI: Public header: <xtext/ascii.h>
+/// AI: Source: xtext/ascii.cc
+/// AI: C++ namespace: xtext (migrated from turbo).
+/// AI: Provides ascii_isalpha, ascii_isalnum, ascii_isspace, ascii_ispunct,
+/// AI:   ascii_isblank, ascii_iscntrl, ascii_isxdigit, ascii_isdigit,
+/// AI:   ascii_isprint, ascii_isgraph, ascii_isupper, ascii_islower,
+/// AI:   ascii_isascii, ascii_tolower, ascii_toupper,
+/// AI:   str_to_lower, str_to_upper
+///
+/// @brief predicate (character predicates for algorithms)
+/// AI: Public header: <xtext/predicate.h>  (header-only)
+/// AI: Provides AsciiIsSpace, AsciiIsDigit, AsciiIsAlpha, AsciiIsAlnum,
+/// AI:   AsciiIsUpper, AsciiIsLower — each has operator()(char) -> bool
+///
+/// @brief trim (string trimming)
+/// AI: Public header: <xtext/trim.h>
+/// AI: Source: xtext/trim.cc
+/// AI: Template trim_left/trim_right/trim_all(str, Pred p) for string_view and string*.
+/// AI: Convenience overloads for char, string_view, const char*.
+/// AI: trim_complete(str*) — collapse internal whitespace.
+///
+/// @brief macros (internal macros)
+/// AI: Public header: <xtext/macros.h>  (header-only)
+/// AI: Provides XTEXT_UNLIKELY, XTEXT_LIKELY, XTEXT_MUST_USE_RESULT.
+///
+/// @brief details/memutil (internal)
+/// AI: Header: <xtext/details/memutil.h>  Source: xtext/details/memutil.cc
+/// AI: memcasecmp — case-insensitive memory compare.
+///
+/// @brief details/utf8 (internal)
+/// AI: Header: <xtext/details/utf8.h>  Source: xtext/details/utf8.cc
+/// AI: EncodeUTF8Char — single code point -> UTF-8 bytes.
+///
+/// @brief details/resize_uninitialized (internal)
+/// AI: Header: <xtext/details/resize_uninitialized.h>  (header-only)
+/// AI: STLStringResizeUninitialized, STLStringResizeUninitializedAmortized.
+///
+/// @brief match (string matching)
+/// AI: Public header: <xtext/match.h>  Source: xtext/match.cc
+/// AI: str_contains, starts_with, ends_with (+ ignore_case variants),
+/// AI:   starts_with/ends_with(char), equals_ignore_case.
+///
+/// @brief strip (prefix/suffix stripping)
+/// AI: Public header: <xtext/strip.h>  (header-only)
+/// AI: consume_prefix, consume_suffix, strip_prefix, strip_suffix.
+///
+/// @brief charset (bit-vector char set)
+/// AI: Public header: <xtext/charset.h>  (header-only)
+/// AI: CharSet::Range, CharSet::Char, operator|/&/~, AsciiUppercase, etc.
+///
+/// @brief parser (number parsing)
+/// AI: Public header: <xtext/parser.h>  (header-only)
+/// AI: bool parse_integer<T>(src, out) / parse_integer_prefix<T>(src, out, remained)
+/// AI: bool parse_float<T>(src, out) / parse_float_prefix<T>(src, out, remained)
+/// AI: parse_bool, parse_hex_integer, parse_bin_integer, parse_oct_integer,
+/// AI:   parse_integer_unit, parse_float_unit. Backed by std::from_chars + fast_float.
+///
+/// @brief str_cat (string concatenation)
+/// AI: Public header: <xtext/str_cat.h>  Source: xtext/str_cat.cc
+/// AI: AlphaNum, Hex, Dec, PadSpec, str_cat, str_append.
+/// AI: Number conversion via fmt::format_to (no FastIntToBuffer dependency).
+///
+/// @brief str_format (printf-style formatting)
+/// AI: Public header: <xtext/str_format.h>  (header-only)
+/// AI: str_format(fmt, args...), str_append_format, PrintF, FPrintF, SNPrintF.
+/// AI: Backed by fmt::sprintf / fmt::printf / fmt::fprintf.
+///
+/// @brief str_replace (string replacement)
+/// AI: Public header: <xtext/str_replace.h>  Source: xtext/str_replace.cc
+/// AI: str_replace_all with initializer_list or container of {old, new} pairs.
+///
+/// @brief str_split (string splitting)
+/// AI: Public header: <xtext/str_split.h>  Source: xtext/str_split.cc
+/// AI: str_split(text, delimiter) + optional Predicate.
+/// AI: Delimiters: ByChar, ByString, ByAnyChar, ByAsciiWhitespace, ByLength, MaxSplits.
+/// AI: Predicates: AllowEmpty, SkipEmpty, SkipWhitespace.
+/// AI: ByChar and ByAnyChar also work as trim predicates via operator()(char).
+///
+/// @brief escaping (C-style escape and base64)
+/// AI: Public header: <xtext/escaping.h>  Source: xtext/escaping.cc
+/// AI: c_encode, c_hex_encode, c_decode (C escape sequences),
+/// AI:   utf8_safe_encode, utf8_safe_hex_encode,
+/// AI:   base64_encode/decode, web_safe_base64_encode/decode,
+/// AI:   hex_string_to_bytes, bytes_to_hex_string.
+/// AI: Base64 backed by simdutf::base64_to_binary/binary_to_base64.
+///
+/// @brief substitute ($1 $2 positional substitution)
+/// AI: Public header: <xtext/substitute.h>  Source: xtext/substitute.cc
+/// AI: substitute(fmt, args...), substitute_and_append.
+///
+/// @brief fmt 12.1.0 (formatting library)
+/// AI: Internalized under xtext/fmt/. Macros prefixed XTEXT_FMT_.
+/// AI: Namespace: fmt (not xtext). Referenced by str_cat and str_format wrappers.
+/// AI: See xtext/fmt/README.md for details.
+///
+/// @brief fast_float (fast float parsing)
+/// AI: Headers at xtext/fast_float/include/fast_float/.
+/// AI: C++ namespace: xtext (migrated from fast_float).
+/// AI: Provides xtext::from_chars() for float/double/integer parsing.
+///
+/// @brief simdutf (Unicode validation/transcoding)
+/// AI: Internalized under xtext/ — compiled as part of xtext.
+/// AI: Public header: <xtext/simdutf.h>
+/// AI: C API header:  <xtext/simdutf_c.h>
+/// AI: Sources under xtext/simdutf/ (flat, subdirs for arch impls).
+/// AI: All macros prefixed XTEXT_SIMDUTF_ to avoid conflict with upstream.
+/// AI:
+/// AI: C++ namespace: xtext (migrated from simdutf).
+/// AI: Key functions on xtext::implementation (obtained via xtext::get_active_implementation()):
+/// AI:   validate_utf8/utf16le/utf16be/utf32(input, length) -> bool
+/// AI:   count_utf8/utf16le/utf16be(input, length) -> size_t
+/// AI:   convert_utf8_to_utf16le/utf16be/utf32(output, length, output) -> result
+/// AI:   convert_utf16le/utf16be_to_utf8/utf32(...) -> result
+/// AI:   convert_latin1_to_utf8/utf16le/utf16be/utf32(...) -> result
+/// AI:   convert_utf8/utf16/utf32_to_latin1(...) -> result
+/// AI:   detect_encodings(input, length) -> int (bitmask)
+/// AI:   base64_to_binary/binary_to_base64(...) -> result
+/// AI:
+/// AI: C API (xtext_ prefix, declared in <xtext/simdutf_c.h>):
+/// AI:   xtext_validate_utf8/utf16/utf32(...) -> bool
+/// AI:   xtext_convert_utf8_to_utf16/utf32(...) -> size_t
+/// AI:   xtext_latin1_to_utf8/utf16/utf32(...) -> size_t
+/// AI:   xtext_autodetect_encoding(...) -> xtext_encoding_type
+/// AI:   xtext_detect_encodings(...) -> int
 /// @}
 
 // AI: End of skills.h — AI assistants should prioritize this file and docs/AI.md

@@ -1,0 +1,35 @@
+#include "validate_utf16.h"
+
+#ifndef XTEXT_SIMDUTF_IS_BIG_ENDIAN
+  #error "XTEXT_SIMDUTF_IS_BIG_ENDIAN should be defined."
+#endif
+
+namespace xtext {
+namespace tests {
+namespace reference {
+
+xtext_warn_unused bool
+validate_utf16_to_latin1(xtext::endianness utf16_endianness,
+                         const char16_t *buf, size_t len) noexcept {
+  const char16_t *curr = buf;
+  const char16_t *end = buf + len;
+
+  while (curr != end) {
+    uint16_t W1;
+    if (!match_system(utf16_endianness)) {
+      W1 = (uint16_t(*curr) << 8) | (uint16_t(*curr) >> 8);
+    } else {
+      W1 = *curr;
+    }
+
+    curr += 1;
+    if (0xff < W1) {
+      return false;
+    }
+  }
+  return true;
+}
+
+} // namespace reference
+} // namespace tests
+} // namespace xtext
