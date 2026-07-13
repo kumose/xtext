@@ -25,7 +25,6 @@
 
 #include <xtext/ascii.h>
 #include <xtext/details/resize_uninitialized.h>
-#include <xtext/escaping.h>
 #include <xtext/str_cat.h>
 
 namespace xtext::substitute_internal {
@@ -96,15 +95,12 @@ const char kHexChar[17] = "0123456789abcdef";
 
 }  // namespace
 
-Arg::Arg(void *value) { piece_ = ConvertPtr(value); }
-Arg::Arg(const void *value) { piece_ = ConvertPtr(value); }
-
-std::string_view Arg::Convert(uint64_t value) {
+std::string_view Arg::ConvertSigned(int64_t value) {
   auto end = fmt::format_to(scratch_, "{}", value);
   return std::string_view(scratch_, static_cast<size_t>(end - scratch_));
 }
 
-std::string_view Arg::Convert(int64_t value) {
+std::string_view Arg::ConvertUnsigned(uint64_t value) {
   auto end = fmt::format_to(scratch_, "{}", value);
   return std::string_view(scratch_, static_cast<size_t>(end - scratch_));
 }
