@@ -146,9 +146,8 @@ namespace xtext {
 
     inline void substitute_and_append(
             std::string *output, std::string_view format) {
-        std::string_view pieces[] = {};
         substitute_internal::SubstituteAndAppendArray(
-                output, format, pieces, 0);
+                output, format, nullptr, 0);
     }
 
     inline void substitute_and_append(
