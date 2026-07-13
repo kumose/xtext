@@ -15,7 +15,17 @@
 
 #pragma once
 
+#if defined(__GNUC__) || defined(__clang__)
 #define XTEXT_UNLIKELY(x) __builtin_expect(!!(x), 0)
 #define XTEXT_LIKELY(x)   __builtin_expect(!!(x), 1)
+#else
+#define XTEXT_UNLIKELY(x) (x)
+#define XTEXT_LIKELY(x)   (x)
+#endif
 
+#if defined(__clang__) && defined(__has_attribute) && \
+    __has_attribute(warn_unused_result)
 #define XTEXT_MUST_USE_RESULT __attribute__((warn_unused_result))
+#else
+#define XTEXT_MUST_USE_RESULT
+#endif

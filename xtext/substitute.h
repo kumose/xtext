@@ -97,14 +97,14 @@ namespace xtext {
 
             Arg(char value) : piece_(scratch_, 1) { scratch_[0] = value; }
 
-            Arg(short value) { piece_ = Convert(static_cast<long long>(value)); }
-            Arg(unsigned short value) { piece_ = Convert(static_cast<unsigned long long>(value)); }
-            Arg(int value) { piece_ = Convert(static_cast<long long>(value)); }
-            Arg(unsigned int value) { piece_ = Convert(static_cast<unsigned long long>(value)); }
-            Arg(long value) { piece_ = Convert(static_cast<long long>(value)); }
-            Arg(unsigned long value) { piece_ = Convert(static_cast<unsigned long long>(value)); }
-            Arg(long long value) { piece_ = Convert(value); }
-            Arg(unsigned long long value) { piece_ = Convert(value); }
+            Arg(short value) { piece_ = Convert(static_cast<int64_t>(value)); }
+            Arg(unsigned short value) { piece_ = Convert(static_cast<uint64_t>(value)); }
+            Arg(int value) { piece_ = Convert(static_cast<int64_t>(value)); }
+            Arg(unsigned int value) { piece_ = Convert(static_cast<uint64_t>(value)); }
+            Arg(long value) { piece_ = Convert(static_cast<int64_t>(value)); }
+            Arg(unsigned long value) { piece_ = Convert(static_cast<uint64_t>(value)); }
+            Arg(long long value) { piece_ = Convert(static_cast<int64_t>(value)); }
+            Arg(unsigned long long value) { piece_ = Convert(static_cast<uint64_t>(value)); }
 
             Arg(float value) { piece_ = ConvertFloat(value); }
             Arg(double value) { piece_ = ConvertFloat(value); }
