@@ -25,6 +25,6 @@ kmcmake_cc_library(
     validate_utf16_to_latin1.h
     validate_utf32_to_latin1.h
     CXXOPTS ${KMCMAKE_CXX_OPTIONS}
-    LINKS ${PROJECT_NAME}::xtext_builtin
+    LINKS ${PROJECT_NAME}::xtext
     EXCLUDE_SYSTEM
 )

@@ -3,7 +3,7 @@ function(add_fastfloat_test NAME)
         NAME ${NAME}
         MODULE fast_float
         SOURCES ${NAME}.cpp
-        LINKS ${PROJECT_NAME}::xtext_builtin
+        LINKS ${PROJECT_NAME}::xtext
         CXXOPTS ${KMCMAKE_CXX_OPTIONS}
     )
 endfunction()

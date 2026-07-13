@@ -19,6 +19,6 @@ kmcmake_cc_library(
     utf16.h
     CXXOPTS ${KMCMAKE_CXX_OPTIONS}
     DEFINES XTEXT_SIMDUTF_TEST_LOOP_TRIALS=100
-    LINKS ${PROJECT_NAME}::xtext_builtin simdutf_tests_reference_static
+    LINKS ${PROJECT_NAME}::xtext simdutf_tests_reference_static
     EXCLUDE_SYSTEM
 )

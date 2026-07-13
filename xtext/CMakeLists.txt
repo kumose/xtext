@@ -20,9 +20,21 @@
 
 kmcmake_cc_library(
         NAMESPACE ${PROJECT_NAME}
-        NAME xtext_builtin
+        NAME xtext
         SOURCES
         simdutf/simdutf.cc
+        ascii.cc
+        trim.cc
+        match.cc
+        str_replace.cc
+        str_cat.cc
+        str_split.cc
+        escaping.cc
+        substitute.cc
+        details/memutil.cc
+        details/utf8.cc
+        fmt/format.cc
+        fmt/os.cc
         CXXOPTS
         ${KMCMAKE_CXX_OPTIONS}
         PLINKS
