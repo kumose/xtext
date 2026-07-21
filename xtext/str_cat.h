@@ -59,7 +59,7 @@
 #include <utility>
 #include <vector>
 
-#include <xtext/fmt/format.h>
+#include <fmt/format.h>
 #include <xtext/macros.h>
 
 namespace xtext {

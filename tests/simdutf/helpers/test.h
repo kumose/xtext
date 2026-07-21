@@ -8,6 +8,8 @@
 #include <set>
 #include <vector>
 
+#define XTEXT_SIMDUTF_BASE64_TEST_MAXLEN 100
+
 namespace xtext {
 namespace test {
 

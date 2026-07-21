@@ -1,5 +1,5 @@
 
-#include "xtext/fast_float/include/fast_float/fast_float.h"
+#include "xtext/fast_float/fast_float.h"
 #include <iostream>
 #include <string>
 #include <system_error>

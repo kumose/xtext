@@ -1,4 +1,4 @@
-#include "xtext/fast_float/include/fast_float/fast_float.h"
+#include "xtext/fast_float/fast_float.h"
 
 #include <cstdint>
 #include <ios>
@@ -109,7 +109,12 @@ size_t build_random_string(RandomEngine &rand, char *buffer) {
   if (rand.next_bool()) {
     buffer[pos++] = '-';
   }
-  int number_of_digits = rand.next_ranged_int(1, 19);
+  int number_of_digits = rand.next_ranged_int(1, 100);
+  if (number_of_digits == 100) {
+    // With low probability, we want to allow very long strings just to stress
+    // the system.
+    number_of_digits = rand.next_ranged_int(1, 2000);
+  }
   int location_of_decimal_separator = rand.next_ranged_int(1, number_of_digits);
   for (size_t i = 0; i < size_t(number_of_digits); i++) {
     if (i == size_t(location_of_decimal_separator)) {
@@ -193,7 +198,7 @@ bool tester(uint64_t seed, size_t volume) {
   char buffer[4096]; // large buffer (can't overflow)
   RandomEngine rand(seed);
   for (size_t i = 0; i < volume; i++) {
-    if ((i % 1000000) == 0) {
+    if ((i % 100000) == 0) {
       std::cout << ".";
       std::cout.flush();
     }
@@ -251,18 +256,17 @@ bool tester(uint64_t seed, size_t volume) {
 }
 
 int main() {
+
 #if defined(__CYGWIN__) || defined(__MINGW32__) || defined(__MINGW64__) ||     \
     defined(sun) || defined(__sun)
-  std::cout << "Warning: msys/cygwin detected. This particular test is likely "
-               "to generate false failures due to our reliance on the "
-               "underlying runtime library."
-            << std::endl;
+  std::cout << "Warning: msys/cygwin or solaris detected." << std::endl;
   return EXIT_SUCCESS;
 #else
   if (tester(1234344, 100000000)) {
     std::cout << "All tests ok." << std::endl;
     return EXIT_SUCCESS;
   }
+  std::cout << "Failure." << std::endl;
   return EXIT_FAILURE;
 
 #endif

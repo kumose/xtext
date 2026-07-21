@@ -31,10 +31,9 @@ kmcmake_cc_library(
         str_split.cc
         escaping.cc
         substitute.cc
+        fnmatch.cc
         details/memutil.cc
         details/utf8.cc
-        fmt/format.cc
-        fmt/os.cc
         CXXOPTS
         ${KMCMAKE_CXX_OPTIONS}
         PLINKS

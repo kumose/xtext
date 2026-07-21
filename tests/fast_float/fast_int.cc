@@ -21,7 +21,7 @@
 #include <cstring>
 #include <random>
 #include <algorithm>
-#include "xtext/fast_float/include/fast_float/fast_float.h"
+#include "xtext/fast_float/fast_float.h"
 #include <cstdint>
 
 /*
