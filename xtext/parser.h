@@ -24,7 +24,7 @@
 #include <type_traits>
 
 #include <xtext/ascii.h>
-#include <xtext/fast_float/include/fast_float/fast_float.h>
+#include <xtext/fast_float/fast_float.h>
 #include <xtext/macros.h>
 #include <xtext/match.h>
 #include <xtext/trim.h>

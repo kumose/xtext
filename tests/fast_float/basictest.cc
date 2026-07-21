@@ -2,7 +2,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 
-#include "xtext/fast_float/include/fast_float/fast_float.h"
+#include "xtext/fast_float/fast_float.h"
 #include <cfenv>
 #include <cmath>
 #include <cstdio>

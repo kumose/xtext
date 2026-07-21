@@ -15,4 +15,14 @@
 
 #pragma once
 
-inline int sub(int a, int b) { return a - b; }
+#include <string_view>
+
+namespace xtext {
+    // Like POSIX `fnmatch`, but:
+    // * accepts `string_view`
+    // * does not allocate any dynamic memory
+    // * only supports * and ? wildcards and not bracket expressions [...]
+    // * wildcards may match /
+    // * no backslash-escaping
+    bool fn_match(std::string_view pattern, std::string_view str);
+} // namespace xtext

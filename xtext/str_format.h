@@ -42,7 +42,7 @@
 #include <string_view>
 #include <type_traits>
 
-#include <xtext/fmt/printf.h>
+#include <fmt/printf.h>
 #include <xtext/macros.h>
 
 namespace xtext {
