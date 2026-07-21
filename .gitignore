@@ -36,6 +36,7 @@ go.mod
 go.sum
 
 build
+build-ninja
 cmake-build-debug
 .idea
 .DS_Store
@@ -51,3 +52,4 @@ __pychache__
 _skbuild
 refs
 
+ninja-build
